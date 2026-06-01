@@ -1,12 +1,12 @@
 //#full-example
-package com.useridentifyresolution
+package com.resolution
 
 
 import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
-import com.useridentifyresolution.GreeterMain.SayHello
+import com.resolution.GreeterMain.SayHello
 
 //#greeter-actor
 object Greeter {
