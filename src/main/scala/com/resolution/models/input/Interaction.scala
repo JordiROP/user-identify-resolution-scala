@@ -1,17 +1,17 @@
 package com.resolution.models.input
 
 import com.resolution.models.commons.Source.Source
-import com.resolution.models.commons.InteractionType.InteractionType
-import com.resolution.models.commons.{InteractionType, Source}
+import com.resolution.models.commons.EventType.EventType
+import com.resolution.models.commons.{EventType, Source}
 import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
 
 import java.util.UUID
 
 final case class Interaction(id: UUID,
-                       source: Source,
-                       event: InteractionType,
-                       userIds: Set[String])
+                             source: Source,
+                             event: EventType,
+                             userIds: Set[String])
 
 object Interaction {
   // define enumeration codecs for Interaction
@@ -19,10 +19,10 @@ object Interaction {
     Decoder.decodeEnumeration(Source)
   implicit val sourceEncoder: Encoder[Source.Value] =
     Encoder.encodeEnumeration(Source)
-  implicit val eventTypeDecoder: Decoder[InteractionType.Value] =
-    Decoder.decodeEnumeration(InteractionType)
-  implicit val eventTypeEncoder: Encoder[InteractionType.Value] =
-    Encoder.encodeEnumeration(InteractionType)
+  implicit val eventTypeDecoder: Decoder[EventType.Value] =
+    Decoder.decodeEnumeration(EventType)
+  implicit val eventTypeEncoder: Encoder[EventType.Value] =
+    Encoder.encodeEnumeration(EventType)
 
   //see: https://circe.github.io/circe/codecs/semiauto-derivation.html
   implicit val eventDecoder: Decoder[Interaction] = deriveDecoder[Interaction]

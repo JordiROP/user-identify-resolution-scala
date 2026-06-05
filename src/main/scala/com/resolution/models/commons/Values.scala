@@ -5,8 +5,8 @@ object Source extends Enumeration {
   val webpage, appscreen = Value
 }
 
-object InteractionType extends Enumeration {
-  type InteractionType = Value
+object EventType extends Enumeration {
+  type EventType = Value
   val display, buy = Value
 }
 
