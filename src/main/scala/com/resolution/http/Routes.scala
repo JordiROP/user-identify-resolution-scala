@@ -2,7 +2,7 @@ package com.resolution.http
 
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.actor.ActorSystem
-import com.contentsquare.model.Metrics
+import com.resolution.models.internal.Metrics
 import com.resolution.models.input.{Interaction, UpdateInteraction}
 import com.resolution.models.output.Confirmation
 import org.slf4j.LoggerFactory
@@ -49,9 +49,8 @@ object Routes {
       get {
         log.info(f"GET /metrics")
         // TODO: your code goes here: metrics calculation
-        val metrics: Metrics = Metrics()
 
-        complete(metrics)
+        complete(Confirmation.ok)
       }
     }
   }
