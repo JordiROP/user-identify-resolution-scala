@@ -12,7 +12,7 @@ lazy val root = (project in file(".")).settings(
   inThisBuild(
     List(organization := "com.resolution", scalaVersion := "2.13.18")
   ),
-  name := "scala-template",
+  name := "scala-user-identify-resolution",
   libraryDependencies ++= Seq(
     // akka system
     "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
