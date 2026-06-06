@@ -104,4 +104,26 @@ final case class DB(
       xDeviceUsers = cross
     )
   }
+
+  def findInteractionsFromConnectedUsers(userIds: Set[String]): Set[UUID] = {
+    @tailrec
+    def traverse(toVisitUsers: List[String], visitedUsers: Set[String], visitedInteractions: Set[UUID]): Set[UUID] = {
+      toVisitUsers match {
+        case Nil =>
+          visitedInteractions
+        case currentId :: restUserIds =>
+          if (visitedUsers.contains(currentId)) {
+            traverse(restUserIds, visitedUsers ++ currentId, visitedInteractions)
+          } else {
+            val newInteractions = this.userInteractions(currentId)
+            val interactionUsers = newInteractions.flatMap(interactionId => {this.interactions(interactionId).userIds})
+            val newUsers = interactionUsers -- visitedUsers - currentId
+
+            traverse(restUserIds ++ newUsers.toList, visitedUsers ++ currentId, visitedInteractions ++ newInteractions)
+          }
+      }
+    }
+
+    traverse(userIds.toList, Set.empty, Set.empty)
+  }
 }
