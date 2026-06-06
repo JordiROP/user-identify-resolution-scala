@@ -18,6 +18,7 @@ object Routes {
     * @return Route definition for Web endpoints
     */
   def define(implicit sys: ActorSystem): Route = {
+    // TODO DEFINE SERVICES INSIDE THE HEADER WHEN CREATED
     import Directives._
     import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
     import io.circe.generic.auto._
