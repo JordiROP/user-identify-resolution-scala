@@ -1,8 +1,9 @@
 package com.resolution
 
+import com.resolution.models.commons.EventType
 import com.resolution.models.commons.Source.Source
 import com.resolution.models.commons.EventType.EventType
-import com.resolution.models.internal.{Interaction, User, Metrics}
+import com.resolution.models.internal.{Interaction, Metrics, User}
 
 import java.util.UUID
 import scala.annotation.tailrec
@@ -57,7 +58,7 @@ final case class DB(
   }
 
   def addUserInteraction(userId: String, interactionId: UUID): DB = {
-    val interactions = this.userInteractions(userId).union(Set(interactionId))
+    val interactions = this.userInteractions(userId) + interactionId
     this.copy(userInteractions = this.userInteractions + (userId -> interactions))
   }
 
@@ -127,4 +128,18 @@ final case class DB(
 
     traverse(userIds.toList, Set.empty, Set.empty)
   }
+
+  def updateMetrics(userId: String, source: Source, eventType: EventType): DB = {
+    val metric = getMetric(userId)
+    val updatedMetrics = metric.updateMetrics(source, eventType)
+    this.copy(metrics = this.metrics + (userId -> updatedMetrics))
+  }
+
+  def mergeMetrics(referentId: String, currentId: String): DB = {
+    val referentMetric: Metrics = getMetric(referentId)
+    val currentMetrics: Metrics = getMetric(currentId)
+    val mergedMetrics = referentMetric.mergeMetrics(currentMetrics)
+    this.copy(metrics = this.metrics + (referentId -> mergedMetrics))
+  }
+
 }

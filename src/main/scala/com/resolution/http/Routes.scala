@@ -35,7 +35,7 @@ object Routes {
       post {
         entity(as[Interaction]) { interaction: Interaction =>
           log.info(f"POST /collect - $interaction")
-          // TODO: your code goes here: data collection
+          collectJob.processCollect(interaction)
           complete(Confirmation.ok)
         }
       }
