@@ -62,7 +62,8 @@ final case class DB(
   }
 
   def updateUsersInteraction(users: Set[String], interactionId: UUID): DB = {
-    this.copy(interactions = this.interactions + (interactionId -> users))
+    val updatedInteraction = getInteraction(interactionId).copy(userIds = users)
+    this.copy(interactions = this.interactions + (interactionId -> updatedInteraction))
   }
 
   def createMetric(userId: String, source: Source, eventType: EventType): DB = {
@@ -74,7 +75,7 @@ final case class DB(
     this.copy(metrics = this.metrics - userId)
   }
 
-  def delete_user(userId: String): DB = {
+  def deleteUser(userId: String): DB = {
     if (this.hasMetrics(userId)) {
       this.copy(
         users = this.users - userId,
@@ -87,7 +88,7 @@ final case class DB(
     }
   }
 
-  def calculate_metrics(): DB = {
+  def calculateMetrics(): DB = {
     val counters: (Int, Int, Int) = (0, 0, 0)
 
     val (unique, bounced, cross) = this.metrics.values.foldLeft(counters){
@@ -113,13 +114,13 @@ final case class DB(
           visitedInteractions
         case currentId :: restUserIds =>
           if (visitedUsers.contains(currentId)) {
-            traverse(restUserIds, visitedUsers ++ currentId, visitedInteractions)
+            traverse(restUserIds, visitedUsers + currentId, visitedInteractions)
           } else {
             val newInteractions = this.userInteractions(currentId)
             val interactionUsers = newInteractions.flatMap(interactionId => {this.interactions(interactionId).userIds})
             val newUsers = interactionUsers -- visitedUsers - currentId
 
-            traverse(restUserIds ++ newUsers.toList, visitedUsers ++ currentId, visitedInteractions ++ newInteractions)
+            traverse(restUserIds ++ newUsers.toList, visitedUsers + currentId, visitedInteractions ++ newInteractions)
           }
       }
     }

@@ -4,38 +4,30 @@ import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import com.resolution.DBActor
-import com.resolution.actor.DatabaseActor
-import com.resolution.service.AnalyticsService
+import com.resolution.jobs.{CollectJob, MetricsJob, UpdateJob}
 import com.typesafe.config.Config
 
 import java.net.InetSocketAddress
+import scala.concurrent.ExecutionContextExecutor
 import scala.util.{Failure, Success}
 
 object Server {
-
-  def main(args: Array[String]): Unit = {
-    start()
-  }
-
   def start(): Unit = {
-    // 1. We create the ROOT behavior of our typed system.
-    // This acts as the structural supervisor of our entire application lifecycle.
+
     val rootBehavior = Behaviors.setup[Nothing] { context =>
       implicit val system: ActorSystem[_] = context.system
-      implicit val ec = context.executionContext
+      implicit val ec: ExecutionContextExecutor = context.executionContext
 
       val log = context.log
       val config: Config = system.settings.config
 
-      // 2. SPAWN THE AGENT-IN-CHARGE (Created EXACTLY ONCE at boot)
       val dbActorRef = context.spawn(DBActor(), "global-database-gatekeeper")
 
-      // 3. INJECT into your Business Services
-      // DEFINE HERE UPDATE COLLECT METRICS
+      val collectService = new CollectJob(dbActorRef)
+      val updateService  = new UpdateJob(dbActorRef)
+      val metricsService = new MetricsJob(dbActorRef)
 
-      // 4. INJECT the service directly into your Routes generator
-      // Your HTTP routes can now freely trigger background reads and writes!
-      // val applicationRoutes = Routes.define(analyticsService)
+      val applicationRoutes = Routes.define(collectJob = collectService, updateJob = updateService, metricsJob = metricsService)
 
       val interface: String = config.getString("web-app.http.interface")
       val port: Int = config.getInt("web-app.http.port")

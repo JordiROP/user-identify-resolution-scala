@@ -1,8 +1,7 @@
 package com.resolution.http
 
 import akka.http.scaladsl.server.{Directives, Route}
-import akka.actor.ActorSystem
-import com.resolution.models.internal.Metrics
+import com.resolution.jobs.{CollectJob, UpdateJob, MetricsJob}
 import com.resolution.models.input.{Interaction, UpdateInteraction}
 import com.resolution.models.output.Confirmation
 import org.slf4j.LoggerFactory
@@ -17,7 +16,11 @@ object Routes {
     * @param sys Akka Actor System
     * @return Route definition for Web endpoints
     */
-  def define(implicit sys: ActorSystem): Route = {
+  def define(
+              collectJob: CollectJob,
+              updateJob: UpdateJob,
+              metricsJob: MetricsJob
+            ): Route = {
     // TODO DEFINE SERVICES INSIDE THE HEADER WHEN CREATED
     import Directives._
     import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._

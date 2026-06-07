@@ -24,7 +24,7 @@ lazy val root = (project in file(".")).settings(
     "io.circe" %% "circe-generic" % circeVersion,
     "io.circe" %% "circe-parser" % circeVersion,
     // logging framework
-    "ch.qos.logback" % "logback-classic" % "1.2.11",
+    "ch.qos.logback" % "logback-classic" % "1.5.6",
     // testing frameworks
     "org.scalatest" %% "scalatest" % "3.2.12" % Test,
     "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
