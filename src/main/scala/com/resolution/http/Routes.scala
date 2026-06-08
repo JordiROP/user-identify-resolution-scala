@@ -1,7 +1,9 @@
 package com.resolution.http
 
+import akka.actor.typed.ActorRef
 import akka.http.scaladsl.server.{Directives, Route}
-import com.resolution.jobs.{CollectJob, UpdateJob, MetricsJob}
+import com.resolution.DBActor
+import com.resolution.jobs.MetricsJob
 import com.resolution.models.input.{Interaction, UpdateInteraction}
 import com.resolution.models.output.Confirmation
 import org.slf4j.LoggerFactory
@@ -17,16 +19,14 @@ object Routes {
     * @return Route definition for Web endpoints
     */
   def define(
-              collectJob: CollectJob,
-              updateJob: UpdateJob,
-              metricsJob: MetricsJob
-            ): Route = {
-    // TODO DEFINE SERVICES INSIDE THE HEADER WHEN CREATED
+              dbActor: ActorRef[DBActor.Command]
+            )(implicit system: akka.actor.typed.ActorSystem[_]): Route = {
+
     import Directives._
     import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
     import io.circe.generic.auto._
 
-    // ping endpoint
+    implicit val ec: scala.concurrent.ExecutionContext = system.executionContext
     path("ping") {
       get {
         complete(Confirmation.ok)
@@ -35,11 +35,10 @@ object Routes {
       post {
         entity(as[Interaction]) { interaction: Interaction =>
           log.info(f"POST /collect - $interaction")
-          collectJob.processCollect(interaction)
+          dbActor.tell(DBActor.ProcessCollect(interaction))
           complete(Confirmation.ok)
         }
       }
-      // id update endpoint
     } ~ path("update") {
       post {
         entity(as[UpdateInteraction]) { update: UpdateInteraction =>
@@ -48,13 +47,10 @@ object Routes {
           complete(Confirmation.ok)
         }
       }
-      // metrics endpoint
     } ~ path("metrics") {
       get {
-        log.info(f"GET /metrics")
-        // TODO: your code goes here: metrics calculation
-
-        complete(Confirmation.ok)
+        val snapshot = com.resolution.DBActor.currentMetricsSnapshot
+        complete(snapshot)
       }
     }
   }

@@ -14,7 +14,6 @@ final case class Interaction(id: UUID,
                              userIds: Set[String])
 
 object Interaction {
-  // define enumeration codecs for Interaction
   implicit val sourceDecoder: Decoder[Source.Value] =
     Decoder.decodeEnumeration(Source)
   implicit val sourceEncoder: Encoder[Source.Value] =
@@ -24,7 +23,6 @@ object Interaction {
   implicit val eventTypeEncoder: Encoder[EventType.Value] =
     Encoder.encodeEnumeration(EventType)
 
-  //see: https://circe.github.io/circe/codecs/semiauto-derivation.html
   implicit val eventDecoder: Decoder[Interaction] = deriveDecoder[Interaction]
   implicit val eventEncoder: Encoder[Interaction] = deriveEncoder[Interaction]
 }

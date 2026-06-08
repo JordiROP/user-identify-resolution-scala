@@ -1,10 +1,12 @@
 package com.resolution.jobs
 
-import akka.actor.typed.ActorRef
-import com.resolution.DBActor.Command
+import com.resolution.DB
+import com.resolution.models.output.MetricsResponse
 
-import scala.concurrent.ExecutionContext
+class MetricsJob {
 
-class MetricsJob(dbActor: ActorRef[Command])(implicit ec: ExecutionContext, system: akka.actor.typed.ActorSystem[_]) {
+  def getMetrics(state: DB): MetricsResponse = {
+      state.getMetrics
+  }
 
 }

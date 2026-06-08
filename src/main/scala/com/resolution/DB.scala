@@ -1,9 +1,9 @@
 package com.resolution
 
-import com.resolution.models.commons.EventType
-import com.resolution.models.commons.Source.Source
 import com.resolution.models.commons.EventType.EventType
+import com.resolution.models.commons.Source.Source
 import com.resolution.models.internal.{Interaction, Metrics, User}
+import com.resolution.models.output.MetricsResponse
 
 import java.util.UUID
 import scala.annotation.tailrec
@@ -23,7 +23,7 @@ final case class DB(
   def getInteractionFromUser(userId: String): Set[UUID] = userInteractions(userId)
   def hasMetrics(userId: String): Boolean = metrics.contains(userId)
   def getMetric(userId: String): Metrics = metrics(userId)
-
+  def getMetrics: MetricsResponse = MetricsResponse(this.uniqueUsers, this.bouncedUsers, this.xDeviceUsers)
   def addUser(userId: String, parent: Option[String]): DB = {
     val newUser: User = User(userId, parent.getOrElse(userId))
     this.copy(users = this.users + (userId -> newUser))
@@ -57,8 +57,10 @@ final case class DB(
     this.copy(interactions = this.interactions + (interactionId -> interaction))
   }
 
+  def userInteractionExist(userId: String): Boolean = this.userInteractions.contains(userId)
+
   def addUserInteraction(userId: String, interactionId: UUID): DB = {
-    val interactions = this.userInteractions(userId) + interactionId
+    val interactions = this.userInteractions.getOrElse(userId, Set()) + interactionId
     this.copy(userInteractions = this.userInteractions + (userId -> interactions))
   }
 

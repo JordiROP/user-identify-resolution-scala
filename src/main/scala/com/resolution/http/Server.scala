@@ -4,7 +4,6 @@ import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.Behaviors
 import akka.http.scaladsl.Http
 import com.resolution.DBActor
-import com.resolution.jobs.{CollectJob, MetricsJob, UpdateJob}
 import com.typesafe.config.Config
 
 import java.net.InetSocketAddress
@@ -23,17 +22,11 @@ object Server {
 
       val dbActorRef = context.spawn(DBActor(), "global-database-gatekeeper")
 
-      val collectService = new CollectJob(dbActorRef)
-      val updateService  = new UpdateJob(dbActorRef)
-      val metricsService = new MetricsJob(dbActorRef)
-
-      val applicationRoutes = Routes.define(collectJob = collectService, updateJob = updateService, metricsJob = metricsService)
+      val applicationRoutes = Routes.define(dbActorRef)
 
       val interface: String = config.getString("web-app.http.interface")
       val port: Int = config.getInt("web-app.http.port")
 
-      // 5. Bind the HTTP server to the network using the typed system context
-      // (Note: Akka HTTP requires a classic system under the hood, which context.system.classicSystem handles automatically)
       Http()(system.classicSystem)
         .newServerAt(interface, port)
         .bindFlow(applicationRoutes)
@@ -45,11 +38,8 @@ object Server {
             log.error("Failed to bind HTTP endpoint, terminating system", e)
             system.terminate()
         }
-
       Behaviors.empty
     }
-
-    // Initialize the main Typed Actor System container using our root layout
     ActorSystem[Nothing](rootBehavior, "AnalyticsPlatformSystem")
   }
 }
