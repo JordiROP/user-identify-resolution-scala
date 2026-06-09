@@ -18,11 +18,11 @@ final case class DB(
                    xDeviceUsers: Int = 0
                    ) {
   def userExist(userId: String): Boolean = users.contains(userId)
-  def getUser(userId: String): User = users(userId)
+
   def getInteraction(interactionId: UUID): Interaction = interactions(interactionId)
-  def getInteractionFromUser(userId: String): Set[UUID] = userInteractions(userId)
+
   def hasMetrics(userId: String): Boolean = metrics.contains(userId)
-  def getMetric(userId: String): Metrics = metrics(userId)
+  private def getMetric(userId: String): Metrics = metrics(userId)
   def getMetrics: MetricsResponse = MetricsResponse(this.uniqueUsers, this.bouncedUsers, this.xDeviceUsers)
   def addUser(userId: String, parent: Option[String]): DB = {
     val newUser: User = User(userId, parent.getOrElse(userId))
@@ -56,8 +56,6 @@ final case class DB(
     val interaction: Interaction = Interaction(uids, source, event)
     this.copy(interactions = this.interactions + (interactionId -> interaction))
   }
-
-  def userInteractionExist(userId: String): Boolean = this.userInteractions.contains(userId)
 
   def addUserInteraction(userId: String, interactionId: UUID): DB = {
     val interactions = this.userInteractions.getOrElse(userId, Set()) + interactionId

@@ -1,0 +1,53 @@
+[info] welcome to sbt 1.12.11 (Eclipse Adoptium Java 17)
+[info] loading settings for project user-identify-resolution-scala-build-build-build from metals.sbt...
+[info] loading project definition from /Users/joldystuff/Desktop/user-identify-resolution-scala/project/project/project
+[info] loading settings for project user-identify-resolution-scala-build-build from metals.sbt...
+[info] loading project definition from /Users/joldystuff/Desktop/user-identify-resolution-scala/project/project
+[success] Generated .bloop/user-identify-resolution-scala-build-build.json
+[success] Total time: 1 s, completed Jun 9, 2026, 10:48:55 PM
+[info] loading settings for project user-identify-resolution-scala-build from metals.sbt, plugins.sbt...
+[info] loading project definition from /Users/joldystuff/Desktop/user-identify-resolution-scala/project
+[success] Generated .bloop/user-identify-resolution-scala-build.json
+[success] Total time: 0 s, completed Jun 9, 2026, 10:48:56 PM
+[info] loading settings for project root from build.sbt...
+[info] set current project to scala-user-identify-resolution (in build file:/Users/joldystuff/Desktop/user-identify-resolution-scala/)
+[info] running (fork) com.resolution.Main 
+[info] [2026-06-09 22:48:56,579] [INFO] [akka.event.slf4j.Slf4jLogger] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-3] [] - Slf4jLogger started
+[info] [2026-06-09 22:48:56,770] [INFO] [com.resolution.http.Server$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-3] [] - Server online at http://0:0:0:0:0:0:0:0:8080/
+[info] [2026-06-09 22:49:01,707] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-16] [] - POST /update - UpdateInteraction(d2ab0d0a-3436-4b1e-9dfd-88a903a17634,List(be56e97f, 939df1fd, b72e4234, a42e8a9b))
+[info] [2026-06-09 22:49:01,707] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-6] [] - POST /update - UpdateInteraction(b21b4cb4-3c93-44d6-a887-8ac1c35f414a,List(945aa7dd, 8a5412e9))
+[info] [2026-06-09 22:49:01,710] [ERROR] [com.resolution.http.Server$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-16] [akka://AnalyticsPlatformSystem/user] - key not found: b21b4cb4-3c93-44d6-a887-8ac1c35f414a
+[info] java.util.NoSuchElementException: key not found: b21b4cb4-3c93-44d6-a887-8ac1c35f414a
+[info] 	at scala.collection.immutable.Map$EmptyMap$.apply(Map.scala:243)
+[info] 	at scala.collection.immutable.Map$EmptyMap$.apply(Map.scala:239)
+[info] 	at com.resolution.DB.getInteraction(DB.scala:22)
+[info] 	at com.resolution.jobs.UpdateJob.execute(UpdateJob.scala:17)
+[info] 	at com.resolution.DBActor$.$anonfun$active$1(DBActor.scala:48)
+[info] 	at akka.actor.typed.internal.BehaviorImpl$ReceiveMessageBehavior.receive(BehaviorImpl.scala:153)
+[info] 	at akka.actor.typed.Behavior$.interpret(Behavior.scala:274)
+[info] 	at akka.actor.typed.Behavior$.interpretMessage(Behavior.scala:230)
+[info] 	at akka.actor.typed.internal.adapter.ActorAdapter.handleMessage(ActorAdapter.scala:131)
+[info] 	at akka.actor.typed.internal.adapter.ActorAdapter.aroundReceive(ActorAdapter.scala:107)
+[info] 	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:580)
+[info] 	at akka.actor.ActorCell.invoke(ActorCell.scala:548)
+[info] 	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)
+[info] 	at akka.dispatch.Mailbox.run(Mailbox.scala:231)
+[info] 	at akka.dispatch.Mailbox.exec(Mailbox.scala:243)
+[info] 	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373)
+[info] 	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182)
+[info] 	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655)
+[info] 	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622)
+[info] 	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165)
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-12] [] - POST /collect - CollectInteraction(5d2409f9-1edc-4863-a989-566d608370e0,webpage,display,Set(b47c89be))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-3] [] - POST /collect - CollectInteraction(cebda6cc-953e-42db-ae4d-8f1ecfa675f4,webpage,display,Set(01bec037, e4db9236))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-11] [] - POST /collect - CollectInteraction(45ff612e-0589-457d-9007-f5ba0a20efe4,appscreen,display,Set(282c5f8c, 43334767))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-5] [] - POST /collect - CollectInteraction(b21b4cb4-3c93-44d6-a887-8ac1c35f414a,webpage,buy,Set(62afc062, 12d063b7, f098787a))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-17] [] - POST /collect - CollectInteraction(71e11f99-7e9f-4e0b-b2d7-b5161f3e3010,appscreen,buy,Set(29e2350f, 65daae74))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-15] [] - POST /collect - CollectInteraction(d2ab0d0a-3436-4b1e-9dfd-88a903a17634,webpage,buy,Set(96f0d2a4, dc9ff621, a7a170bd))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-13] [] - POST /collect - CollectInteraction(7164275d-5f81-4e39-8282-ce8ab81c482f,webpage,display,Set(1ea2d323, f53aeb04, 3d3b6b51))
+[info] [2026-06-09 22:49:01,711] [INFO] [com.resolution.http.Routes$] [AnalyticsPlatformSystem-akka.actor.default-dispatcher-14] [] - POST /collect - CollectInteraction(1bc4d80e-4148-44ef-b060-ac10d28ec0b9,appscreen,buy,Set(ff6b007d, 33c9eae2, 2b07e17d, 4f12235b))
+
+[warn] Canceling execution...
+[warn] run canceled
+[error] Cancelled: run
+[error] Use 'last' for the full log.
