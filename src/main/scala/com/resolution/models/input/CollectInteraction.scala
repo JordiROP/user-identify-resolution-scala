@@ -8,12 +8,12 @@ import io.circe.generic.semiauto._
 
 import java.util.UUID
 
-final case class Interaction(id: UUID,
+final case class CollectInteraction(id: UUID,
                              source: Source,
                              event: EventType,
                              userIds: Set[String])
 
-object Interaction {
+object CollectInteraction {
   implicit val sourceDecoder: Decoder[Source.Value] =
     Decoder.decodeEnumeration(Source)
   implicit val sourceEncoder: Encoder[Source.Value] =
@@ -23,8 +23,6 @@ object Interaction {
   implicit val eventTypeEncoder: Encoder[EventType.Value] =
     Encoder.encodeEnumeration(EventType)
 
-  implicit val eventDecoder: Decoder[Interaction] = deriveDecoder[Interaction]
-  implicit val eventEncoder: Encoder[Interaction] = deriveEncoder[Interaction]
+  implicit val eventDecoder: Decoder[CollectInteraction] = deriveDecoder[CollectInteraction]
+  implicit val eventEncoder: Encoder[CollectInteraction] = deriveEncoder[CollectInteraction]
 }
-
-final case class UpdateInteraction(id: UUID, userIds: Seq[String])

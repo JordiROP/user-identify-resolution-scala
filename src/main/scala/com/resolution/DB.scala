@@ -78,17 +78,12 @@ final case class DB(
     this.copy(metrics = this.metrics - userId)
   }
 
-  def deleteUser(userId: String): DB = {
-    if (this.hasMetrics(userId)) {
-      this.copy(
-        users = this.users - userId,
-        userInteractions = this.userInteractions - userId,
-        metrics = this.metrics - userId)
-    } else {
-      this.copy(
-        users = this.users - userId,
-        userInteractions = this.userInteractions - userId)
-    }
+  def deleteUsers(usersId: Set[String]): DB = {
+    val hasMetricsUsers = usersId.filter(this.hasMetrics)
+    this.copy(
+      users = this.users -- usersId,
+      userInteractions = this.userInteractions -- usersId,
+      metrics = this.metrics -- hasMetricsUsers)
   }
 
   def calculateMetrics(): DB = {
@@ -109,12 +104,12 @@ final case class DB(
     )
   }
 
-  def findInteractionsFromConnectedUsers(userIds: Set[String]): Set[UUID] = {
+  def findInteractionsFromConnectedUsers(userIds: Set[String]): (Set[String], Set[UUID]) = {
     @tailrec
-    def traverse(toVisitUsers: List[String], visitedUsers: Set[String], visitedInteractions: Set[UUID]): Set[UUID] = {
+    def traverse(toVisitUsers: List[String], visitedUsers: Set[String], visitedInteractions: Set[UUID]): (Set[String], Set[UUID]) = {
       toVisitUsers match {
         case Nil =>
-          visitedInteractions
+          (visitedUsers, visitedInteractions)
         case currentId :: restUserIds =>
           if (visitedUsers.contains(currentId)) {
             traverse(restUserIds, visitedUsers + currentId, visitedInteractions)

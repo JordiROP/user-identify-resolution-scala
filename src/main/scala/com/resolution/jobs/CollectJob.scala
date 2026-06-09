@@ -1,7 +1,7 @@
 package com.resolution.jobs
 
 import com.resolution.DB
-import com.resolution.models.input.Interaction
+import com.resolution.models.input.CollectInteraction
 
 class CollectJob {
 
@@ -14,7 +14,7 @@ class CollectJob {
     (parent, state2)
   }
 
-  def execute(interaction: Interaction, state: DB): DB = {
+  private def processFirstParent(interaction: CollectInteraction, state: DB): (String, DB) = {
     val state1 = state.addInteraction(interaction.id, interaction.userIds, interaction.source, interaction.event)
 
     val currRef = interaction.userIds.head
@@ -28,10 +28,12 @@ class CollectJob {
     } else {
       state3.createMetric(parent, interaction.source, interaction.event)
     }
+    (parent, state4)
+  }
 
-    val finalState = interaction.userIds.tail.foldLeft(state4) { (accState, nextUser) =>
+  private def processRestUsers(parent: String, interaction: CollectInteraction, state: DB): DB = {
+    val finalState = interaction.userIds.tail.foldLeft(state) { (accState, nextUser) =>
       val accState2 = accState.addUserInteraction(nextUser, interaction.id)
-
       val (currParent, accState3) = getParent(nextUser, accState2)
 
       if (currParent != parent) {
@@ -45,7 +47,17 @@ class CollectJob {
         accState3
       }
     }
+    finalState
+  }
 
-    finalState.calculateMetrics()
+  def execute(interaction: CollectInteraction, state: DB, doMetrics: Boolean = true): DB = {
+    val (parent: String, nextState: DB) = processFirstParent(interaction, state)
+    val finalState: DB = processRestUsers(parent, interaction ,nextState)
+
+    if (doMetrics){
+      finalState.calculateMetrics()
+    } else {
+      finalState
+    }
   }
 }

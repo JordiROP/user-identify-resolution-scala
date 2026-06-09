@@ -4,7 +4,7 @@ import akka.actor.typed.ActorRef
 import akka.http.scaladsl.server.{Directives, Route}
 import com.resolution.DBActor
 import com.resolution.jobs.MetricsJob
-import com.resolution.models.input.{Interaction, UpdateInteraction}
+import com.resolution.models.input.{CollectInteraction, UpdateInteraction}
 import com.resolution.models.output.Confirmation
 import org.slf4j.LoggerFactory
 
@@ -33,7 +33,7 @@ object Routes {
       }
     } ~ path("collect") {
       post {
-        entity(as[Interaction]) { interaction: Interaction =>
+        entity(as[CollectInteraction]) { interaction: CollectInteraction =>
           log.info(f"POST /collect - $interaction")
           dbActor.tell(DBActor.ProcessCollect(interaction))
           complete(Confirmation.ok)
@@ -43,7 +43,7 @@ object Routes {
       post {
         entity(as[UpdateInteraction]) { update: UpdateInteraction =>
           log.info(f"POST /update - $update")
-          // TODO: your code goes here: ids update
+          dbActor.tell(DBActor.ProcessUpdate(update))
           complete(Confirmation.ok)
         }
       }
