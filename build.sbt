@@ -14,12 +14,14 @@ lazy val root = (project in file(".")).settings(
   ),
   name := "scala-user-identify-resolution",
   libraryDependencies ++= Seq(
-    // akka system
+   /* // akka system
     "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
     "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,
+    "com.typesafe.akka" %% "akka-stream" % akkaVersion,*/
+    "dev.zio" %% "zio" % "2.1.26",
+    "dev.zio" %% "zio-http" % "3.8.1",
     // circe for JSON support
-    "de.heikoseeberger" %% "akka-http-circe" % "1.39.2",
+    /*"de.heikoseeberger" %% "akka-http-circe" % "1.39.2",*/
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
     "io.circe" %% "circe-parser" % circeVersion,
@@ -27,7 +29,7 @@ lazy val root = (project in file(".")).settings(
     "ch.qos.logback" % "logback-classic" % "1.5.6",
     // testing frameworks
     "org.scalatest" %% "scalatest" % "3.2.12" % Test,
-    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test
+/*    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test*/
   )
 )
