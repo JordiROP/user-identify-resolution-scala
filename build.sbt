@@ -1,6 +1,8 @@
-lazy val akkaHttpVersion = "10.2.9"
-lazy val akkaVersion = "2.6.19"
+val PekkoVersion     = "1.0.2"
+val PekkoHttpVersion = "1.0.1"
 lazy val circeVersion = "0.14.1"
+val ZIOVersion     = "2.1.1"  // Versión estable de ZIO 2.x
+val ZIOHttpVersion = "3.0.0-RC6" // Versión recomendada de zio-http para ZIO 2.x
 
 // Run in a separate JVM, to make sure sbt waits until all threads have
 // finished before returning.
@@ -14,14 +16,6 @@ lazy val root = (project in file(".")).settings(
   ),
   name := "scala-user-identify-resolution",
   libraryDependencies ++= Seq(
-   /* // akka system
-    "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
-    "com.typesafe.akka" %% "akka-actor-typed" % akkaVersion,
-    "com.typesafe.akka" %% "akka-stream" % akkaVersion,*/
-    "dev.zio" %% "zio" % "2.1.26",
-    "dev.zio" %% "zio-http" % "3.8.1",
-    // circe for JSON support
-    /*"de.heikoseeberger" %% "akka-http-circe" % "1.39.2",*/
     "io.circe" %% "circe-core" % circeVersion,
     "io.circe" %% "circe-generic" % circeVersion,
     "io.circe" %% "circe-parser" % circeVersion,
@@ -29,7 +23,11 @@ lazy val root = (project in file(".")).settings(
     "ch.qos.logback" % "logback-classic" % "1.5.6",
     // testing frameworks
     "org.scalatest" %% "scalatest" % "3.2.12" % Test,
-/*    "com.typesafe.akka" %% "akka-stream-testkit" % akkaVersion % Test,
-    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test*/
+
+    "dev.zio" %% "zio"         % ZIOVersion,
+    "dev.zio" %% "zio-streams" % ZIOVersion,
+
+    // 2. Servidor Web de ZIO HTTP (Netty no bloqueante integrado)
+    "dev.zio" %% "zio-http" % ZIOHttpVersion,
   )
 )

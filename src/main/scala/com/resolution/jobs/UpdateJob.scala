@@ -20,7 +20,7 @@ class UpdateJob {
     val state2: DB = state1.updateUsersInteraction(toUpdateUsers, interaction.id)
     val collectJob: CollectJob = new CollectJob()
     val finalState = recompute.foldLeft(state2) { (accState, recomputeUUID) =>
-      val recomputeInteraction: Interaction = state.getInteraction(recomputeUUID)
+      val recomputeInteraction: Interaction = accState.getInteraction(recomputeUUID)
       collectJob.execute(
         new CollectInteraction(
           recomputeUUID,
